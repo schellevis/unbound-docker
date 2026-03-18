@@ -1,10 +1,25 @@
-FROM debian:buster as openssl
+FROM debian:bookworm AS openssl
 LABEL maintainer="Matthew Vance"
 
-ENV VERSION_OPENSSL=openssl-1.1.1g \
-    SHA256_OPENSSL=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46 \
+ENV VERSION_OPENSSL=openssl-3.5.5 \
+    SHA256_OPENSSL=b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
-    OPGP_OPENSSL=8657ABB260F056B1E5190839D9C4D26D0E604491
+    # OpenSSL OMC
+    OPGP_OPENSSL_1=EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5 \
+    # Richard Levitte
+    OPGP_OPENSSL_2=7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C \
+    # Matt Caswell
+    OPGP_OPENSSL_3=8657ABB260F056B1E5190839D9C4D26D0E604491 \
+    # Paul Dale
+    OPGP_OPENSSL_4=B7C1C14360F353A36862E4D5231C84CDDCC69C45 \
+    # Tomas Mraz
+    OPGP_OPENSSL_5=A21FAB74B0088AA361152586B8EF1A6BA9DA2D5C \
+    # Tim Hudson
+    OPGP_OPENSSL_6=C1F33DD8CE1D4CC613AF14DA9195C48241FBF7DD \
+    # Kurt Roeckx
+    OPGP_OPENSSL_7=E5E52560DD91C556DDBDA5D02064C53641C25E5D \
+    # OpenSSL
+    OPGP_OPENSSL_8=BA5473A2B0587B07FB27CF2D216094DFD0CB81EF
 
 WORKDIR /tmp/src
 
@@ -17,8 +32,7 @@ RUN set -e -x && \
     curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
     export GNUPGHOME && \
-    ( gpg --no-tty --keyserver ipv4.pool.sks-keyservers.net --recv-keys "$OPGP_OPENSSL" \
-    || gpg --no-tty --keyserver ha.pool.sks-keyservers.net --recv-keys "$OPGP_OPENSSL" ) && \
+    gpg --no-tty --keyserver keyserver.ubuntu.com --recv-keys "$OPGP_OPENSSL_1" "$OPGP_OPENSSL_2" "$OPGP_OPENSSL_3" "$OPGP_OPENSSL_4" "$OPGP_OPENSSL_5" "$OPGP_OPENSSL_6" "$OPGP_OPENSSL_7" "$OPGP_OPENSSL_8" && \
     gpg --batch --verify openssl.tar.gz.asc openssl.tar.gz && \
     tar xzf openssl.tar.gz && \
     cd $VERSION_OPENSSL && \
@@ -41,34 +55,36 @@ RUN set -e -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-FROM debian:buster as unbound
+FROM debian:bookworm AS unbound
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \
-    UNBOUND_VERSION=1.10.1 \
-    UNBOUND_SHA256=b73677c21a71cf92f15cc8cfe76a3d875e40f65b6150081c39620b286582d536 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.10.1.tar.gz
+    UNBOUND_VERSION=1.24.2 \
+    UNBOUND_SHA256=44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz
 
 WORKDIR /tmp/src
 
 COPY --from=openssl /opt/openssl /opt/openssl
 
-RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
+RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make" && \
     set -x && \
     DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
       $build_deps \
       bsdmainutils \
       ca-certificates \
       ldnsutils \
-      libevent-2.1-6 \
-      libexpat1 && \
+      libevent-2.1-7 \
+      libexpat1 \
+      libprotobuf-c-dev \
+      protobuf-c-compiler && \
     curl -sSL $UNBOUND_DOWNLOAD_URL -o unbound.tar.gz && \
     echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
-    cd unbound-1.10.1 && \
+    cd unbound-1.24.2 && \
     groupadd _unbound && \
-    useradd -g _unbound -s /etc -d /dev/null _unbound && \
+    useradd -g _unbound -s /dev/null -d /etc _unbound && \
     ./configure \
         --disable-dependency-tracking \
         --prefix=/opt/unbound \
@@ -76,9 +92,12 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
         --with-username=_unbound \
         --with-ssl=/opt/openssl \
         --with-libevent \
+        --with-libnghttp2 \
+        --enable-dnstap \
         --enable-tfo-server \
         --enable-tfo-client \
-        --enable-event-api && \
+        --enable-event-api \
+        --enable-subnet && \
     make install && \
     mv /opt/unbound/etc/unbound/unbound.conf /opt/unbound/etc/unbound/unbound.conf.example && \
     apt-get purge -y --auto-remove \
@@ -90,20 +109,13 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev make" && \
         /var/lib/apt/lists/*
 
 
-FROM debian:buster
+FROM debian:bookworm
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \
-    VERSION=1.0 \
-    SUMMARY="${NAME} is a validating, recursive, and caching DNS resolver." \
+    UNBOUND_VERSION=1.24.2
+ENV SUMMARY="${NAME} is a validating, recursive, and caching DNS resolver." \
     DESCRIPTION="${NAME} is a validating, recursive, and caching DNS resolver."
-
-LABEL summary="${SUMMARY}" \
-      description="${DESCRIPTION}" \
-      io.k8s.description="${DESCRIPTION}" \
-      io.k8s.display-name="Unbound ${UNBOUND_VERSION}" \
-      name="mvance/${NAME}" \
-      maintainer="Matthew Vance"
 
 WORKDIR /tmp/src
 
@@ -114,10 +126,12 @@ RUN set -x && \
       bsdmainutils \
       ca-certificates \
       ldnsutils \
-      libevent-2.1-6\
-      libexpat1 && \
+      libevent-2.1-7 \
+      libnghttp2-14 \
+      libexpat1 \
+      libprotobuf-c1 && \
     groupadd _unbound && \
-    useradd -g _unbound -s /etc -d /dev/null _unbound && \
+    useradd -g _unbound -s /dev/null -d /etc _unbound && \
     apt-get purge -y --auto-remove \
       $build_deps && \
     rm -rf \
@@ -126,20 +140,25 @@ RUN set -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-COPY a-records.conf /opt/unbound/etc/unbound/
-COPY forward-records.conf /opt/unbound/etc/unbound/
-COPY srv-records.conf /opt/unbound/etc/unbound/
-COPY unbound.sh /
+COPY data/ /
 
 RUN chmod +x /unbound.sh
 
 WORKDIR /opt/unbound/
 
-ENV PATH /opt/unbound/sbin:"$PATH"
+ENV PATH=/opt/unbound/sbin:$PATH
+
+LABEL org.opencontainers.image.version=${UNBOUND_VERSION} \
+      org.opencontainers.image.title="mvance/unbound" \
+      org.opencontainers.image.description="a validating, recursive, and caching DNS resolver" \
+      org.opencontainers.image.url="https://github.com/MatthewVance/unbound-docker" \
+      org.opencontainers.image.vendor="Matthew Vance" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/MatthewVance/unbound-docker"
 
 EXPOSE 53/tcp
 EXPOSE 53/udp
 
-HEALTHCHECK --interval=5s --timeout=3s --start-period=5s CMD drill @127.0.0.1 cloudflare.com || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 CMD drill @127.0.0.1 cloudflare.com || exit 1
 
 CMD ["/unbound.sh"]

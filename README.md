@@ -1,11 +1,11 @@
 # Unbound DNS Server Docker Image
 
 ## Supported tags and respective `Dockerfile` links
-- [`1.24.2`, `latest` (*1.24.2/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.24.2)
-- [`1.22.0`, (*1.22.0/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.22.0)
-- [`1.21.1`, (*1.21.1/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.21.1)
-- [`1.21.0`, (*1.21.0/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.21.0)
-- [`1.20.0`, (*1.20.0/Dockerfile*)](https://github.com/MatthewVance/unbound-docker/tree/master/1.20.0)
+- [`1.24.2`, `latest` (*1.24.2/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.24.2)
+- [`1.22.0`, (*1.22.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.22.0)
+- [`1.21.1`, (*1.21.1/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.21.1)
+- [`1.21.0`, (*1.21.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.21.0)
+- [`1.20.0`, (*1.20.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.20.0)
 
 ## What is Unbound?
 
@@ -58,7 +58,7 @@ mvance/unbound:latest
 
 By default, this image forwards queries Cloudflare DNS server over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](1.24.2/data/unbound.sh) provides the configuration unless it is overriden as described below.
 
-*Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](1.24.2/data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/MatthewVance/unbound-docker#recursive-config).*
+*Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](1.24.2/data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/schellevis/unbound-docker#recursive-config).*
 
 ### Override default forward
 
@@ -285,7 +285,7 @@ records and the main unbound configuration file.
 
 ## Recursive config
 
-The default config forwards forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/MatthewVance/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/MatthewVance/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
+The default config forwards forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/schellevis/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/schellevis/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
 
 ## Performance
 
@@ -326,14 +326,14 @@ While annoying, the container works despite the error. Search this issues in thi
 
 ## Documentation
 
-Documentation for this image is stored right here in the [`README.md`](https://github.com/MatthewVance/unbound-docker/blob/master/README.md).
+Documentation for this image is stored right here in the [`README.md`](https://github.com/schellevis/unbound-docker/blob/master/README.md).
 
 Documentation for Unbound is available on the [project's website](https://unbound.net/).
 
 ## Issues
 
 If you have any problems with or questions about this image, please contact me
-through a [GitHub issue](https://github.com/MatthewVance/unbound-docker/issues).
+through a [GitHub issue](https://github.com/schellevis/unbound-docker/issues).
 
 ## Contributing
 
@@ -342,11 +342,11 @@ imagine the upstream projects would be equally pleased to receive your
 contributions.
 
 Please familiarize yourself with the [repository's `README.md`
-file](https://github.com/MatthewVance/unbound-docker/blob/master/README.md)
+file](https://github.com/schellevis/unbound-docker/blob/master/README.md)
 before attempting a pull request.
 
 Before you start to code, I recommend discussing your plans through a [GitHub
-issue](https://github.com/MatthewVance/unbound-docker/issues), especially for
+issue](https://github.com/schellevis/unbound-docker/issues), especially for
 more ambitious contributions. This gives other contributors a chance to point
 you in the right direction, give you feedback on your design, and help you find
 out if someone else is working on the same thing.
@@ -367,7 +367,7 @@ all possible.
 
 Unless otherwise specified, all code is released under the MIT License (MIT).
 See the [repository's `LICENSE`
-file](https://github.com/MatthewVance/unbound-docker/blob/master/LICENSE) for
+file](https://github.com/schellevis/unbound-docker/blob/master/LICENSE) for
 details.
 
 ### Licenses for other components

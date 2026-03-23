@@ -1,6 +1,8 @@
 FROM debian:bookworm AS openssl
 LABEL maintainer="Matthew Vance"
 
+ARG TARGETARCH
+
 ENV VERSION_OPENSSL=openssl-3.5.5 \
     SHA256_OPENSSL=b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
@@ -36,13 +38,18 @@ RUN set -e -x && \
     gpg --batch --verify openssl.tar.gz.asc openssl.tar.gz && \
     tar xzf openssl.tar.gz && \
     cd $VERSION_OPENSSL && \
+    if [ "$TARGETARCH" = "amd64" ] || [ -z "$TARGETARCH" ]; then \
+      OPENSSL_ARCH_FLAGS="enable-ec_nistp_64_gcc_128"; \
+    else \
+      OPENSSL_ARCH_FLAGS=""; \
+    fi && \
     ./config \
       --prefix=/opt/openssl \
       --openssldir=/opt/openssl \
       no-weak-ssl-ciphers \
       no-ssl3 \
       no-shared \
-      enable-ec_nistp_64_gcc_128 \
+      ${OPENSSL_ARCH_FLAGS} \
       -DOPENSSL_NO_HEARTBEATS \
       -fstack-protector-strong && \
     make depend && \

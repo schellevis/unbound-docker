@@ -163,6 +163,7 @@ server:
     # SECURITY SETTINGS
     ###########################################################################
     # Only give access to recursion clients from LAN IPs
+    access-control: 0.0.0.0/0 refuse
     access-control: 127.0.0.1/32 allow
     access-control: 192.168.0.0/16 allow
     access-control: 172.16.0.0/12 allow
@@ -211,7 +212,7 @@ server:
     # are signed. This enforces DNSSEC validation on nameserver NS sets and the
     # nameserver addresses that are encountered on the referral path to the
     # answer. Experimental option.
-    harden-referral-path: no
+    harden-referral-path: yes
 
     # Ignore very small EDNS buffer sizes from queries.
     harden-short-bufsize: yes
@@ -220,7 +221,7 @@ server:
     # as some webserver configurations may reject HTTP requests lacking
     # this header. If needed, it is better to explicitly set the
     # the http-user-agent.
-    hide-http-user-agent: no
+    hide-http-user-agent: yes
 
     # Refuse id.server and hostname.bind queries
     hide-identity: yes
@@ -244,9 +245,9 @@ server:
     private-address: 172.16.0.0/12
     private-address: 192.168.0.0/16
     private-address: 169.254.0.0/16
-    # private-address: fd00::/8
-    # private-address: fe80::/10
-    # private-address: ::ffff:0:0/96
+    private-address: fd00::/8
+    private-address: fe80::/10
+    private-address: ::ffff:0:0/96
 
     # Enable ratelimiting of queries (per second) sent to nameserver for
     # performing recursion. More queries are turned away with an error

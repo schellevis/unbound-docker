@@ -92,7 +92,45 @@ spec:
             - containerPort: 53
               hostPort: 53
               protocol: UDP
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - NET_BIND_SERVICE
+                - SETGID
+                - SETUID
+                - SYS_CHROOT
+          livenessProbe:
+            exec:
+              command:
+                - drill
+                - "@127.0.0.1"
+                - cloudflare.com
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - drill
+                - "@127.0.0.1"
+                - cloudflare.com
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           volumeMounts:
             - name: unbound-main-conf-volume
               mountPath: /opt/unbound/etc/unbound/unbound.conf

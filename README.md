@@ -1,5 +1,8 @@
 # Unbound DNS Server Docker Image
 
+This is a fork of Matthew Vance's [unbound-docker image](https://github.com/MatthewVance/unbound-docker), which appears to be unmaintained. This fork provides updated versions of Unbound and other bundled libraries.
+
+
 ## Supported tags and respective `Dockerfile` links
 - [`1.24.2`, `latest` (*1.24.2/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.24.2)
 - [`1.22.0`, (*1.22.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.22.0)

@@ -7,6 +7,17 @@
 - [`1.21.0`, (*1.21.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.21.0)
 - [`1.20.0`, (*1.20.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.20.0)
 
+## Image registry
+
+This image is publicly available on the GitHub Container Registry (GHCR):
+
+```
+ghcr.io/schellevis/unbound:latest
+```
+
+Browse all available tags and versions at:
+[https://github.com/schellevis/unbound-docker/pkgs/container/unbound](https://github.com/schellevis/unbound-docker/pkgs/container/unbound)
+
 ## What is Unbound?
 
 Unbound is a validating, recursive, and caching DNS resolver.

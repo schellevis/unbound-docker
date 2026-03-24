@@ -212,7 +212,7 @@ server:
     # are signed. This enforces DNSSEC validation on nameserver NS sets and the
     # nameserver addresses that are encountered on the referral path to the
     # answer. Experimental option.
-    harden-referral-path: yes
+    harden-referral-path: no
 
     # Ignore very small EDNS buffer sizes from queries.
     harden-short-bufsize: yes

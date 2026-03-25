@@ -125,8 +125,6 @@ RUN set -x && \
       libprotobuf-c1 && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
-    apt-get purge -y --auto-remove \
-      $build_deps && \
     rm -rf \
         /opt/unbound/share/man \
         /tmp/* \

@@ -67,6 +67,14 @@ docker run \
 --publish=53:53/tcp \
 --publish=53:53/udp \
 --restart=unless-stopped \
+--security-opt=no-new-privileges:true \
+--cap-drop=ALL \
+--cap-add=CHOWN \
+--cap-add=DAC_OVERRIDE \
+--cap-add=NET_BIND_SERVICE \
+--cap-add=SETGID \
+--cap-add=SETUID \
+--cap-add=SYS_CHROOT \
 ghcr.io/schellevis/unbound:latest
 ```
 
@@ -251,9 +259,23 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     volumes:
-      - "/data/unbound/my_conf/forward-records.conf:/opt/unbound/etc/unbound/forward-records.conf"
-      - "/data/unbound/my_conf/a-records.conf:/opt/unbound/etc/unbound/a-records.conf"
+      - "/data/unbound/my_conf/forward-records.conf:/opt/unbound/etc/unbound/forward-records.conf:ro"
+      - "/data/unbound/my_conf/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro"
+      - "/data/unbound/my_conf/srv-records.conf:/opt/unbound/etc/unbound/srv-records.conf:ro"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - NET_BIND_SERVICE
+      - SETGID
+      - SETUID
+      - SYS_CHROOT
+    mem_limit: 256m
+    pids_limit: 100
 networks:
   dns:
 ```

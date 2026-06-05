@@ -4,7 +4,8 @@ This is a fork of Matthew Vance's [unbound-docker image](https://github.com/Matt
 
 
 ## Supported tags and respective `Dockerfile` links
-- [`1.25.0`, `latest` (*1.25.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.25.0)
+- [`1.25.1`, `latest` (*1.25.1/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.25.1)
+- [`1.25.0`, (*1.25.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.25.0)
 - [`1.24.2`, (*1.24.2/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.24.2)
 - [`1.22.0`, (*1.22.0/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.22.0)
 - [`1.21.1`, (*1.21.1/Dockerfile*)](https://github.com/schellevis/unbound-docker/tree/master/1.21.1)
@@ -79,13 +80,13 @@ docker run \
 ghcr.io/schellevis/unbound:latest
 ```
 
-By default, this image forwards queries Cloudflare DNS server over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](1.25.0/data/unbound.sh) provides the configuration unless it is overriden as described below.
+By default, this image forwards queries Cloudflare DNS server over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](1.25.1/data/unbound.sh) provides the configuration unless it is overriden as described below.
 
-*Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](1.25.0/data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/schellevis/unbound-docker#recursive-config).*
+*Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](1.25.1/data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/schellevis/unbound-docker#recursive-config).*
 
 ### Override default forward
 
-By default, forwarders are configured to use Cloudflare DNS. You can retrieve the configuration in the [forward-records.conf](1.25.0/data/opt/unbound/etc/unbound/forward-records.conf) file.
+By default, forwarders are configured to use Cloudflare DNS. You can retrieve the configuration in the [forward-records.conf](1.25.1/data/opt/unbound/etc/unbound/forward-records.conf) file.
 
 You can create your own configuration file and override the one placed in `/opt/unbound/etc/unbound/forward-records.conf` in the container. This is useful if you prefer to use something other than Cloudflare DNS but do not want to provide a custom unbound.conf file.
 
@@ -251,7 +252,7 @@ version: '3'
 services:
   unbound:
     container_name: unbound
-    image: "ghcr.io/schellevis/unbound:1.25.0"
+    image: "ghcr.io/schellevis/unbound:1.25.1"
     expose:
       - "53"
     networks:
@@ -343,7 +344,7 @@ should have limited impact on security.*
 
 ## Logging
 
-Logging is very limited in the default config created by [unbound.sh](1.25.0/data/unbound.sh). If using the default config as an example starting point, a placeholder for a logfile (`unbound.log`) has been provided with the correct file ownership at the path `/opt/unbound/etc/unbound/` in case you want to increase logging and send to a file.
+Logging is very limited in the default config created by [unbound.sh](1.25.1/data/unbound.sh). If using the default config as an example starting point, a placeholder for a logfile (`unbound.log`) has been provided with the correct file ownership at the path `/opt/unbound/etc/unbound/` in case you want to increase logging and send to a file.
 
 ## Healthcheck
 

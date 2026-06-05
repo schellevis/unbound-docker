@@ -85,7 +85,7 @@ spec:
         app: unbound-dns
     spec:
       containers:
-        - image: mvance/unbound:1.25.0
+        - image: mvance/unbound:1.25.1
           imagePullPolicy: IfNotPresent
           name: dns-unbound
           ports:

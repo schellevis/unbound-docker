@@ -1,10 +1,10 @@
-FROM debian:bookworm AS openssl
+FROM debian:trixie AS openssl
 LABEL maintainer="Matthew Vance"
 
 ARG TARGETARCH
 
-ENV VERSION_OPENSSL=openssl-3.6.2 \
-    SHA256_OPENSSL=aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f \
+ENV VERSION_OPENSSL=openssl-3.6.3 \
+    SHA256_OPENSSL=243a86649cf6f23eeb6a2ff2456e09e5d77dd9018a54d3d96b0c6bdd6ba6c7f1 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
     # OpenSSL OMC
     OPGP_OPENSSL_1=EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5 \
@@ -62,7 +62,7 @@ RUN set -e -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-FROM debian:bookworm AS unbound
+FROM debian:trixie AS unbound
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \
@@ -116,7 +116,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /var/lib/apt/lists/*
 
 
-FROM debian:bookworm
+FROM debian:trixie
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \

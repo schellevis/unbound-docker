@@ -1,4 +1,4 @@
-FROM debian:bookworm AS openssl
+FROM debian:trixie AS openssl
 LABEL maintainer="Matthew Vance"
 
 ARG TARGETARCH
@@ -62,7 +62,7 @@ RUN set -e -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-FROM debian:bookworm AS unbound
+FROM debian:trixie AS unbound
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \
@@ -116,7 +116,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /var/lib/apt/lists/*
 
 
-FROM debian:bookworm
+FROM debian:trixie
 LABEL maintainer="Matthew Vance"
 
 ENV NAME=unbound \

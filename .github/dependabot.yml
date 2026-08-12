@@ -29,3 +29,18 @@ updates:
     directory: "/1.24.2"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/1.25.0"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/1.25.1"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/1.26.0"
+    schedule:
+      interval: "weekly"

@@ -3,8 +3,8 @@ LABEL maintainer="Matthew Vance"
 
 ARG TARGETARCH
 
-ENV VERSION_OPENSSL=openssl-3.6.3 \
-    SHA256_OPENSSL=243a86649cf6f23eeb6a2ff2456e09e5d77dd9018a54d3d96b0c6bdd6ba6c7f1 \
+ENV VERSION_OPENSSL=openssl-3.6.4 \
+    SHA256_OPENSSL=9bffaa1ad1e07b354c21bd3324ec02fa15579f45a7d0494b3e74bc449b7333ef \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
     # OpenSSL OMC
     OPGP_OPENSSL_1=EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5 \
@@ -21,7 +21,9 @@ ENV VERSION_OPENSSL=openssl-3.6.3 \
     # Kurt Roeckx
     OPGP_OPENSSL_7=E5E52560DD91C556DDBDA5D02064C53641C25E5D \
     # OpenSSL
-    OPGP_OPENSSL_8=BA5473A2B0587B07FB27CF2D216094DFD0CB81EF
+    OPGP_OPENSSL_8=BA5473A2B0587B07FB27CF2D216094DFD0CB81EF \
+    # OpenSSL (2026 release key, cross-signed by OPGP_OPENSSL_8)
+    OPGP_OPENSSL_9=B146647E45A7B33947AB226B2A2C87D161692D40
 
 WORKDIR /tmp/src
 
@@ -34,7 +36,7 @@ RUN set -e -x && \
     curl -L $SOURCE_OPENSSL$VERSION_OPENSSL.tar.gz.asc -o openssl.tar.gz.asc && \
     GNUPGHOME="$(mktemp -d)" && \
     export GNUPGHOME && \
-    gpg --no-tty --keyserver keyserver.ubuntu.com --recv-keys "$OPGP_OPENSSL_1" "$OPGP_OPENSSL_2" "$OPGP_OPENSSL_3" "$OPGP_OPENSSL_4" "$OPGP_OPENSSL_5" "$OPGP_OPENSSL_6" "$OPGP_OPENSSL_7" "$OPGP_OPENSSL_8" && \
+    gpg --no-tty --keyserver keyserver.ubuntu.com --recv-keys "$OPGP_OPENSSL_1" "$OPGP_OPENSSL_2" "$OPGP_OPENSSL_3" "$OPGP_OPENSSL_4" "$OPGP_OPENSSL_5" "$OPGP_OPENSSL_6" "$OPGP_OPENSSL_7" "$OPGP_OPENSSL_8" "$OPGP_OPENSSL_9" && \
     gpg --batch --verify openssl.tar.gz.asc openssl.tar.gz && \
     tar xzf openssl.tar.gz && \
     cd $VERSION_OPENSSL && \

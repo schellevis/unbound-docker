@@ -44,3 +44,8 @@ updates:
     directory: "/1.26.0"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/1.26.2"
+    schedule:
+      interval: "weekly"
